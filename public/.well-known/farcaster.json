@@ -1,0 +1,26 @@
+{
+    "accountAssociation": {
+        "header": "eyJmaWQiOjE5ODUxMSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDMzMzJFMzEwNTIxM2E2RTlCMzk3QjRhRkQxOGQzYjdCMTM1QTMyNWUifQ",
+        "payload": "eyJkb21haW4iOiJldGVybmFsbWludC5zdGFrZWFkb3MuY29tIn0",
+        "signature": "sr3hL3z/G0jhqy8qYNQLfrdP3wachPf46TEElT1yQywx5LaLAFg6Q7LgbogzmF2hn4tsDpAlipNlsWF3dwdkGRs="
+    },
+    "frame": {
+        "version": "1",
+        "name": "Base Eternal Mint",
+        "iconUrl": "https://eternalmint.stakeados.com/miniapp-icon.png",
+        "homeUrl": "https://eternalmint.stakeados.com",
+        "imageUrl": "https://eternalmint.stakeados.com/miniapp-cover.png",
+        "buttonTitle": "Mint Now",
+        "splashImageUrl": "https://eternalmint.stakeados.com/miniapp-icon.png",
+        "splashBackgroundColor": "#000000",
+        "webhookUrl": "https://eternalmint.stakeados.com/api",
+        "primaryCategory": "art-creativity",
+        "tags": [
+            "nft",
+            "mint",
+            "base",
+            "onchain",
+            "eternal"
+        ]
+    }
+}

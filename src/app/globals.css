@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Manual Animation Utilities (replacing tailwindcss-animate) */
+@utility animate-in {
+  animation-duration: 150ms;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
+  animation-name: enter;
+}
+
+@utility fade-in {
+  --tw-enter-opacity: 0;
+}
+
+@utility zoom-in-95 {
+  --tw-enter-scale: 0.95;
+}
+
+@utility slide-in-from-bottom-4 {
+  --tw-enter-translate-y: 1rem;
+}
+
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), 1) rotate(var(--tw-enter-rotate, 0));
+  }
+}
+
+
+:root {
+  /* OnchainKit Overrides - Force Green Theme */
+  --ock-bg-primary: var(--primary);
+  --ock-bg-primary-hover: #15803d;
+  /* green-700 */
+  --ock-bg-primary-active: #14532d;
+  /* green-900 */
+  --ock-bg-primary-disabled: #bbf7d0;
+  /* green-200 */
+  --ock-bg-primary-error: var(--primary);
+  /* Force green even on error state button if possible, or red but definitely not blue */
+  --ock-bg-secondary: var(--secondary);
+  --ock-bg-secondary-hover: #dcfce7;
+  /* green-100 */
+  --ock-bg-secondary-active: #bbf7d0;
+  /* green-200 */
+  --ock-text-primary: var(--foreground);
+  --ock-text-secondary: var(--muted-foreground);
+  --ock-icon-color: var(--primary);
+  --ock-bg-default: var(--card);
+  --ock-bg-default-hover: var(--secondary);
+  --ock-border-radius: var(--radius);
+
+  --background: #ffffff;
+  --foreground: #022c22;
+  /* green-950 */
+  --card: #ffffff;
+  --card-foreground: #022c22;
+  --popover: #ffffff;
+  --popover-foreground: #022c22;
+  --primary: #16a34a;
+  /* green-600 */
+  --primary-foreground: #ffffff;
+  --secondary: #f0fdf4;
+  /* green-50 */
+  --secondary-foreground: #166534;
+  /* green-800 */
+  --muted: #f0fdf4;
+  --muted-foreground: #166534;
+  --accent: #f0fdf4;
+  --accent-foreground: #166534;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #bbf7d0;
+  /* green-200 */
+  --input: #bbf7d0;
+  --ring: #16a34a;
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* OnchainKit Overrides - Dark Mode */
+  --ock-bg-primary: var(--primary);
+  --ock-bg-primary-hover: #22c55e;
+  /* green-500 */
+  --ock-bg-primary-active: #16a34a;
+  /* green-600 */
+  --ock-bg-primary-disabled: #052e16;
+  /* green-950 */
+  --ock-bg-secondary: var(--secondary);
+  --ock-bg-secondary-hover: #064e3b;
+  /* green-900 */
+  --ock-bg-secondary-active: #065f46;
+  /* green-800 */
+  --ock-text-primary: var(--foreground);
+  --ock-text-secondary: var(--muted-foreground);
+  --ock-icon-color: var(--primary);
+  --ock-bg-default: var(--card);
+  --ock-bg-default-hover: var(--secondary);
+
+  --background: #020617;
+  /* slate-950 / blackish */
+  --card: #020617;
+  --card-foreground: #4ade80;
+  --popover: #020617;
+  --popover-foreground: #4ade80;
+  --primary: #22c55e;
+  /* green-500 */
+  --primary-foreground: #020617;
+  --secondary: #052e16;
+  /* green-950 */
+  --secondary-foreground: #4ade80;
+  --muted: #052e16;
+  --muted-foreground: #86efac;
+  /* green-300 */
+  --accent: #052e16;
+  --accent-foreground: #4ade80;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fecaca;
+  --border: #14532d;
+  /* green-900 */
+  --input: #14532d;
+  --ring: #22c55e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+  /* KILLS PULL-TO-REFRESH */
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+/* Brute-force overrides for persistent blues/purples */
+button[data-testid="ockTransactionButton"],
+button[class*="bg-blue-600"],
+button[class*="bg-indigo-600"] {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+button[data-testid="ockTransactionButton"]:hover,
+button[class*="bg-blue-600"]:hover,
+button[class*="bg-indigo-600"]:hover {
+  background-color: var(--ock-bg-primary-hover) !important;
+}
