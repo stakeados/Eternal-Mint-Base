@@ -286,33 +286,78 @@ export function MintFlow() {
                             )}
 
                             {/* STATE MACHINE BUTTONS */}
-                            <div className="space-y-3">
-                                {needsApproval ? (
-                                    /* APPROVE BUTTON */
-                                    <button
-                                        onClick={handleApprove}
-                                        disabled={isApproving || isLoadingAllowance}
-                                        className={`w-full py-4 text-lg font-bold shadow-lg transition-all rounded-xl 
-                                            ${isApproving
-                                                ? 'bg-yellow-500/20 text-yellow-500 animate-pulse cursor-wait'
-                                                : 'bg-yellow-500 hover:bg-yellow-600 text-black'}`}
-                                    >
-                                        {isApproving ? 'Approving Spend...' : t('mint.action.approve_only')}
-                                    </button>
-                                ) : (
-                                    /* MINT BUTTON */
-                                    <button
-                                        onClick={handleMint}
-                                        disabled={isMinting || (!isFreeMint && (balance || 0n) < MINT_PRICE_RAW)}
-                                        className={`w-full py-4 text-lg font-bold shadow-lg transition-all rounded-xl
-                                            ${isMinting
-                                                ? 'bg-primary/50 animate-pulse cursor-wait'
-                                                : 'bg-primary hover:bg-primary/90 text-primary-foreground'}`}
-                                    >
-                                        {isMinting ? 'Minting Artifact...' : t('mint.action')}
-                                    </button>
-                                )}
-                            </div>
+                            {/* Transaction Component Handling Approve + Mint */}
+                            <Transaction
+                                capabilities={{
+                                    paymasterService: {
+                                        url: process.env.NEXT_PUBLIC_RPC_URL || ''
+                                    }
+                                }}
+                                calls={async () => {
+                                    const calls = [];
+                                    const PRICE = parseEther('1000');
+
+                                    // 1. Approve if needed
+                                    if (needsApproval) {
+                                        calls.push({
+                                            address: CREATOR_TOKEN_ADDRESS as Address,
+                                            abi: erc20Abi,
+                                            functionName: 'approve',
+                                            args: [MINT_CONTRACT_ADDRESS as Address, PRICE],
+                                        });
+                                    }
+
+                                    // 2. Prepare Metadata for Mint
+                                    let tokenURIArg = "";
+                                    if (imageBase64) {
+                                        const metadata = {
+                                            name: "Eternal Artifact",
+                                            description: "On-Chain Base",
+                                            image: imageBase64,
+                                        };
+                                        const jsonString = JSON.stringify(metadata);
+                                        tokenURIArg = `data:application/json;base64,${btoa(jsonString)}`;
+                                    }
+
+                                    // 3. Mint
+                                    calls.push({
+                                        address: MINT_CONTRACT_ADDRESS as Address,
+                                        abi: ETERNAL_MINT_ABI,
+                                        functionName: 'burnAndMint',
+                                        args: [tokenURIArg],
+                                    });
+
+                                    return calls;
+                                }}
+                                onSuccess={(response) => {
+                                    console.log("Transaction Successful", response);
+                                    setIsMintSuccess(true);
+                                    // Handle OnchainKit response structure
+                                    const txHash = response.transactionReceipts?.[0]?.transactionHash || '';
+                                    if (txHash) {
+                                        setMintTxHash(txHash);
+                                    }
+                                    refetchBalance();
+                                    refetchAllowance();
+                                }}
+                                onError={(e) => {
+                                    console.error("Transaction Failed", e);
+                                }}
+                            >
+                                <TransactionButton
+                                    text={needsApproval ? t('mint.action.approve') : t('mint.action')}
+                                    className="w-full py-4 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg transition-all rounded-xl"
+                                />
+                                <TransactionStatus>
+                                    <TransactionStatusLabel />
+                                    <TransactionStatusAction />
+                                </TransactionStatus>
+                                <TransactionToast>
+                                    <TransactionToastIcon />
+                                    <TransactionToastLabel />
+                                    <TransactionToastAction />
+                                </TransactionToast>
+                            </Transaction>
 
                             {!isFreeMint && (balance || 0n) < MINT_PRICE_RAW && (
                                 <div className="text-center p-4 bg-red-500/10 border border-red-500/30 rounded-lg animate-in fade-in slide-in-from-top-2">

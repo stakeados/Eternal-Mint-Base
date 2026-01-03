@@ -87,6 +87,11 @@ export function GenesisMint() {
                 {/* Action Button */}
                 {isConnected ? (
                     <Transaction
+                        capabilities={{
+                            paymasterService: {
+                                url: process.env.NEXT_PUBLIC_RPC_URL || ''
+                            }
+                        }}
                         calls={async () => {
                             const calls = [];
                             if (!hasAllowance) {
