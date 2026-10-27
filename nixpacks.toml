@@ -1,0 +1,9 @@
+# Preserve the tested runtime across Nixpacks rebuilds (CVE-2026-111497).
+[phases.setup]
+nixPkgs = ["nodejs_24", "npm-9_x"]
+nixpkgsArchive = "23f9169c4ccce521379e602cc82ed873a1f1b52b"
+cmds = [
+  "...",
+  ". /etc/os-release && test \"$ID:$VERSION_ID\" = ubuntu:24.04 && apt-get update && apt-get install -y --no-install-recommends --only-upgrade libbrotli1 && dpkg --compare-versions \"$(dpkg-query -W -f='${Version}' libbrotli1)\" ge 1.1.0-2ubuntu0.1 && rm -rf /var/lib/apt/lists/*",
+  "set -eu; case \"$(uname -m)\" in x86_64) arch=x64 ;; aarch64) arch=arm64 ;; *) exit 1 ;; esac; version=24.22.1; target=\"$(readlink -f \"$(command -v node)\")\"; case \"$target\" in /nix/store/*/bin/node) ;; *) exit 1 ;; esac; task_tmp=\"$(mktemp -d)\"; cd \"$task_tmp\"; archive=\"node-v$version-linux-$arch.tar.xz\"; curl -fsSLO \"https://nodejs.org/dist/v$version/$archive\"; curl -fsSL \"https://nodejs.org/dist/v$version/SHASUMS256.txt\" | grep \"  $archive$\" > SHASUMS256.txt; test -s SHASUMS256.txt; sha256sum -c --status SHASUMS256.txt; tar -xJf \"$archive\" --strip-components=1 \"node-v$version-linux-$arch/bin/node\"; install -m 755 bin/node \"$target\"; test \"$(node --version)\" = \"v$version\"; cd /; rm -rf \"$task_tmp\""
+]
